@@ -28,5 +28,8 @@
     "passport-local": "^1.0.0",
     "pg": "^8.16.3",
     "prisma": "^6.11.1"
+  },
+  "prisma": {
+    "schema": "./prisma"
   }
 }

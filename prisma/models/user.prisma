@@ -1,0 +1,38 @@
+model User {
+    id             String   @id @default(uuid())
+    createdAt      DateTime @default(now())
+    hashedPassword String
+    email          String   @unique
+    role           Role     @default(BASIC)
+    Profile        Profile?
+    updatedAt      DateTime @updatedAt
+}
+
+model Profile {
+    id        String   @id @default(uuid())
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String   @unique
+    // profile information
+    username  String   @unique
+    bio       String?
+    avatarUrl String?
+    pronouns  String?
+    updatedAt DateTime @updatedAt
+
+    //posts, comments and votes
+    writtenPosts    Post[]    @relation("writtenPosts")
+    writtenComments Comment[] @relation("writtenComments")
+    Vote         Vote[] @relation("userVotes")
+    //Forum Stats
+    postCount    Int    @default(0)
+    commentCount Int    @default(0)
+    renown       Int    @default(0)
+    
+}
+
+enum Role {
+    BASIC
+    MODERATOR
+    MCDM
+    ADMIN
+}

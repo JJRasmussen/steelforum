@@ -1,0 +1,45 @@
+model Ability {
+    id          String   @id @default(uuid())
+    name        String   @unique
+    slug        String   @unique
+    updatedAt   DateTime @updatedAt
+    description String
+    class       Class?   @relation("classAbilities", fields: [classId], references: [id])
+    classId     String?
+    levelReq    Int?
+    keywords    Keyword  @relation("abilityKeywords", fields: [keywordId], references: [id])
+    keywordId   String
+    tag         Tag      @relation("abilityTag", fields: [tagId], references: [id])
+    tagId       String   @unique
+
+}
+
+model Keyword {
+    id      String    @id @default(uuid())
+    name    String    @unique
+    updatedAt   DateTime @updatedAt
+    ability Ability[] @relation("abilityKeywords")
+    tag     Tag       @relation("keywordTag", fields: [tagId], references: [id])
+    tagId   String    @unique
+}
+
+model Class {
+    id          String    @id @default(uuid())
+    name        String    @unique
+    updatedAt   DateTime @updatedAt
+    description String
+    abilities   Ability[] @relation("classAbilities")
+    tag         Tag       @relation("classTag", fields: [tagId], references: [id])
+    tagId       String    @unique
+}
+
+/**
+ * To be added when things are working:
+ * ancestries,
+ * combat rules/conditions,
+ * negotiation rules,
+ * items/rewards,
+ * titles,
+ * gods?,
+ * monsters?/monster types
+ */

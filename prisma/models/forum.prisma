@@ -1,0 +1,69 @@
+model Post {
+    id            String    @id @default(uuid())
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt
+    author        Profile   @relation("writtenPosts", fields: [authorId], references: [id])
+    authorId      String
+    //post content
+    title         String
+    slug          String    @unique
+    content       String
+    rating        Int       @default(0)
+    //child comments
+    childComments Comment[]
+    //for search optimization
+    tags          Tag[]     @relation("postTags")
+    Vote          Vote[]    @relation("postVotes")
+}
+
+model Comment {
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    content   String
+    rating    Int       @default(0)
+    author    Profile   @relation("writtenComments", fields: [authorId], references: [id])
+    authorId  String
+    //parent post
+    post      Post      @relation(fields: [postId], references: [id])
+    postId    String
+    //parent comment if any
+    parent    Comment?  @relation("commentReplies", fields: [parentId], references: [id])
+    parentId  String?
+    //child comments
+    replies   Comment[] @relation("commentReplies")
+    //search optimization
+    tags      Tag[]     @relation("commentTags")
+    Vote      Vote[]    @relation("commentVotes")
+}
+
+model Vote {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    strength  Int //currently -3 to +3
+    profile   Profile  @relation("userVotes", fields: [profileId], references: [id])
+    profileId String
+
+    post   Post?   @relation("postVotes", fields: [postId], references: [id])
+    postId String?
+
+    comment   Comment? @relation("commentVotes", fields: [commentId], references: [id])
+    commentId String?
+
+    @@unique([profileId, postId])
+    @@unique([profileId, commentId])
+}
+
+model Tag {
+    id   String @id @default(uuid())
+    name String @unique
+    slug String @unique
+
+    class   Class?   @relation("classTag")
+    ability Ability? @relation("abilityTag")
+    keyword Keyword? @relation("keywordTag")
+
+    posts    Post[]    @relation("postTags")
+    comments Comment[] @relation("commentTags")
+}
