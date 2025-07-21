@@ -22,12 +22,11 @@ model Profile {
     //posts, comments and votes
     writtenPosts    Post[]    @relation("writtenPosts")
     writtenComments Comment[] @relation("writtenComments")
-    Vote         Vote[] @relation("userVotes")
+    Vote            Vote[]    @relation("userVotes")
     //Forum Stats
-    postCount    Int    @default(0)
-    commentCount Int    @default(0)
-    renown       Int    @default(0)
-    
+    postCount       Int       @default(0)
+    commentCount    Int       @default(0)
+    renown          Int       @default(0)
 }
 
 enum Role {

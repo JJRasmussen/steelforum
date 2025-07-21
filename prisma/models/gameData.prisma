@@ -11,22 +11,21 @@ model Ability {
     keywordId   String
     tag         Tag      @relation("abilityTag", fields: [tagId], references: [id])
     tagId       String   @unique
-
 }
 
 model Keyword {
-    id      String    @id @default(uuid())
-    name    String    @unique
-    updatedAt   DateTime @updatedAt
-    ability Ability[] @relation("abilityKeywords")
-    tag     Tag       @relation("keywordTag", fields: [tagId], references: [id])
-    tagId   String    @unique
+    id        String    @id @default(uuid())
+    name      String    @unique
+    updatedAt DateTime  @updatedAt
+    ability   Ability[] @relation("abilityKeywords")
+    tag       Tag       @relation("keywordTag", fields: [tagId], references: [id])
+    tagId     String    @unique
 }
 
 model Class {
     id          String    @id @default(uuid())
     name        String    @unique
-    updatedAt   DateTime @updatedAt
+    updatedAt   DateTime  @updatedAt
     description String
     abilities   Ability[] @relation("classAbilities")
     tag         Tag       @relation("classTag", fields: [tagId], references: [id])
