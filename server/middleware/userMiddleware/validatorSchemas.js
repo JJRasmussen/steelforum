@@ -1,30 +1,43 @@
 import { body } from 'express-validator';
-import userDb from '../../db/queries/userQueries.js';
+import userDb from '../../controllers/db/queries/userQueries.js';
+import { ConflictError, BadRequestError } from '../../errors/CustomErrors.js';
 
 const newUserSchema = [
     body('username')
         .trim()
         .notEmpty()
-        .withMessage('Username can not be empty.')
+        .withMessage('Username can not be empty')
         .bail()
         .isLength({ max: 22 })
-        .withMessage('Username cannot be longer than 22 characters')
+        .withMessage('Username is too long')
         .bail()
-        .custom(async value => {
-            try{
-                console.log("howdy from validator")
-                const user = await userDb.getProfileFromUsername(value);
-                if (user) {
-                    return false;
-                }
-            return true;
-            } catch(error){
-                console.error('error in validatorscheme', error);
-                throw error
+        .isAlphanumeric()
+        .withMessage('Username must only contain letters and numbers')
+        .bail()
+        .custom(async (value) => {
+            const usernameLowerCase = value.toLowerCase();
+            const profile = await userDb.getProfileFromUsernameLowerCase(usernameLowerCase);
+            if (profile) {
+                return Promise.reject('Username already in use')
             };
-            
-        })
-        .withMessage('Username is already in use'),
+            return true;
+        }),
+    body('email')
+        .trim()
+        .toLowerCase()
+        .notEmpty()
+        .withMessage('Email can not be empty')
+        .bail()
+        .isEmail()
+        .withMessage('Invalid email')
+        .bail()
+        .custom(async (value) => {
+            const profile = await userDb.getUserFromEmail(value.toLowerCase());
+            if (profile) {
+                return Promise.reject('Email already in use');
+            };
+            return true;
+        }),
     body('password')
         .notEmpty()
         .withMessage('Password can not be empty')
@@ -33,11 +46,10 @@ const newUserSchema = [
     body('passwordConfirmation')
         .custom((value, { req }) => {
             if (value !== req.body.password) {
-                return false;
+                return Promise.reject('Passwords did not match'); 
             }
             return true;
-        })
-        .withMessage('The passwords did not match'),
+        }),
 ];
 
 export default newUserSchema;

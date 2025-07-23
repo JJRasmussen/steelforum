@@ -1,7 +1,5 @@
-import pool from '../pool.js';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '../prisma.js';
+import { ConflictError, BadRequestError } from '../../../errors/CustomErrors.js';
 
 export async function addNewUserToDatabase(password, email, username) {
     try {
@@ -12,22 +10,29 @@ export async function addNewUserToDatabase(password, email, username) {
                 Profile: {
                     create: {
                         username: username,
+                        usernameLowerCase: username.toLowerCase()
                     },
                 },
             },
         });
         return user;
     } catch (err) {
-        console.log("Error creating user w. Prisma:", err);
+        console.error('Error creating user w. Prisma:', err);
+        if(err instanceof prisma.PrismaClientKnownRequestError){
+            if (err.code === 'P2002'){
+                throw new ConflictError('Email or username already in use.')
+            }
+            throw new BadRequestError('Invalid data format when creating user')
+        }
         throw err;
     }
 }
 
 //get profile
-export async function getProfileFromUsername(username){
+export async function getProfileFromUsernameLowerCase(usernameLowerCase){
     const profile = await prisma.profile.findUnique({
         where: {
-            username: username
+            usernameLowerCase: usernameLowerCase
         },
     });
     return profile;
@@ -37,6 +42,15 @@ export async function getUserFromUserId(userId){
     const user = await prisma.user.findUnique({
         where: {
             id: userId
+        },
+    });
+    return user;
+};
+
+export async function getUserFromEmail(email){
+    const user = await prisma.user.findUnique({
+        where: {
+            email: email
         },
     });
     return user;
@@ -57,7 +71,8 @@ export async function getUserAndProfileFromId(id){
 
 export default {
     addNewUserToDatabase,
-    getProfileFromUsername,
+    getProfileFromUsernameLowerCase,
     getUserFromUserId,
+    getUserFromEmail,
     getUserAndProfileFromId
 }

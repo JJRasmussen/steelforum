@@ -5,6 +5,11 @@ My first project meant for real world users.
 
 Below are thoughts and learnings in regards to the development process.
 
+# Security 
+
+## Password Hashing
+Passwords are hashed using industry best practices w. Argon2 using salt and pepper.
+
 # Database-development
 For the database I have chosen to use PostgreSQL. I used the Prisma ORM to build it. As the number of models grew I decided to split them using into multiple files in a models folder.
 
