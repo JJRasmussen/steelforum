@@ -1,4 +1,4 @@
-import prisma from '../controllers/db/prisma.js'
+import prisma from '../db/prisma.js'
 
 async function resetDatabase() {
     await prisma.profile.deleteMany();

@@ -1,5 +1,5 @@
-import prisma from '../prisma.js';
-import { ConflictError, BadRequestError } from '../../../errors/CustomErrors.js';
+import prisma from '../../db/prisma.js';
+import { ConflictError, BadRequestError } from '../../errors/CustomErrors.js';
 
 export async function addNewUserToDatabase(password, email, username) {
     try {

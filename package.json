@@ -7,9 +7,10 @@
   "scripts": {
     "dev": "NODE_ENV=development node server/app.js",
     "test": "NODE_ENV=test jest",
+    "lint": "eslint",
     "db:push:test": "env $(grep -vE '^#|^$' .env.test | xargs) npx prisma db push",
     "studio": "npx prisma studio",
-    "studio:test": "env $(grep -vE '^#|^$' .env.test | xargs) npx prisma studio" 
+    "studio:test": "env $(grep -vE '^#|^$' .env.test | xargs) npx prisma studio"
   },
   "repository": {
     "type": "git",
@@ -24,15 +25,20 @@
   "devDependencies": {
     "@babel/core": "^7.28.0",
     "@babel/preset-env": "^7.28.0",
+    "@eslint/js": "^9.31.0",
     "@prisma/client": "^6.11.1",
     "argon2": "^0.43.1",
     "babel-jest": "^30.0.5",
     "connect-pg-simple": "^10.0.0",
     "dotenv": "^17.0.1",
     "ejs": "^3.1.10",
+    "eslint": "^9.31.0",
+    "eslint-plugin-jest": "^29.0.1",
+    "eslint-plugin-n": "^17.21.0",
     "express": "^5.1.0",
     "express-session": "^1.18.1",
     "express-validator": "^7.2.1",
+    "globals": "^16.3.0",
     "jest": "^30.0.4",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",

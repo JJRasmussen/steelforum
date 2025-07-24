@@ -1,6 +1,5 @@
 import { body } from 'express-validator';
-import userDb from '../../controllers/db/queries/userQueries.js';
-import { ConflictError, BadRequestError } from '../../errors/CustomErrors.js';
+import userDb from './user.queries.js';
 
 const newUserSchema = [
     body('username')

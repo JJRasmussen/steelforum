@@ -1,9 +1,8 @@
 import request from 'supertest';
-import index from '../routes/indexRouter.js';
+import index from '../../mainRouter.js';
 import express from 'express';
-import userQueries from '../controllers/db/queries/userQueries.js';
-import testUtils from './testUtils.js';
-import { prisma } from '../controllers/db/prisma.js'
+import testUtils from '../testUtils.js';
+import StatusCodes from '../../utils/statusCodes.js'
 
 const app = express();
 app.use(express.urlencoded({ extended:  false }));
@@ -17,7 +16,7 @@ test("index route works", async () => {
   const res = await request(app).get('/');
   expect(res.headers["content-type"]).toMatch(/json/);
   expect(res.body).toEqual({ name: "frodo" });
-  expect(res.statusCode).toBe(200);
+  expect(res.statusCode).toBe(StatusCodes.OK);
 });
 
 describe('GET /api/home', () => {
@@ -27,6 +26,6 @@ describe('GET /api/home', () => {
   expect(res.body.loggedIn).toBe(false);
   expect(res.body.message).toBe('Welcome stranger');
   expect(res.body.trendingPosts).toBeInstanceOf(Array);
-  expect(res.statusCode).toBe(200);
+  expect(res.statusCode).toBe(StatusCodes.OK);
   });
 })

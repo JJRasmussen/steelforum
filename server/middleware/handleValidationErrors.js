@@ -3,7 +3,6 @@ import { BadRequestError, ConflictError } from '../errors/CustomErrors.js';
 
 export default function handleValidationErrors(req, res, next) {
     const errors = validationResult(req);
-    console.log(errors)
     if (errors.isEmpty()){
         return next();
     }

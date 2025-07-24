@@ -1,20 +1,16 @@
 import { Router } from 'express';
-import { validationResult } from 'express-validator';
-import { createNewUser } from '../controllers/userController.js';
-import newUserSchema from '../middleware/userMiddleware/validatorSchemas.js';
-import passport from '../middleware/userMiddleware/passport.js';
-import handleValidationErrors from '../middleware/handleValidationErrors.js';
+import userRouter from './features/user/user.routes.js'
 
-const indexRouter = Router();
+const mainRouter = Router();
 
 //Public Routes
-indexRouter.get('/', async(req, res) => {
+mainRouter.get('/', async(req, res) => {
     return res.json({
         name: 'frodo',
     });
 });
 
-indexRouter.get('/api/home', async(req, res) => {
+mainRouter.get('/api/home', async(req, res) => {
     return res.json({
         loggedIn: false,
         message: 'Welcome stranger',
@@ -22,18 +18,10 @@ indexRouter.get('/api/home', async(req, res) => {
     });
 });
 
-indexRouter.post('/api/users/signup', newUserSchema, handleValidationErrors, async(req, res, next) => {
-    console.log("user creation route initiated")
-    try {
-        console.log("creating user")
-        await createNewUser(req, res, next);
-        console.log("user created")
-        return res.status(201).json({ msg: 'UserCreated' });
-    } catch (err) {
-        console.error('Error in signup route:', err);
-        next(err);
-    }
-});
+mainRouter.use('/user', userRouter);
+
+export default mainRouter;
+
 
 /*
 indexRouter.get('/', async (req, res) => {
@@ -71,4 +59,3 @@ indexRouter.post('/log-in', passport.authenticate('local', {
     })
 );
 */
-export default indexRouter
