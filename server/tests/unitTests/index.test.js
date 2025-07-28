@@ -12,13 +12,6 @@ beforeAll(async() => {
   await testUtils.resetDatabase();
 });
 
-test("index route works", async () => {
-  const res = await request(app).get('/');
-  expect(res.headers["content-type"]).toMatch(/json/);
-  expect(res.body).toEqual({ name: "frodo" });
-  expect(res.statusCode).toBe(StatusCodes.OK);
-});
-
 describe('GET /api/home', () => {
   test("anonymous user /api/home", async () => {
   const res = await request(app).get('/api/home')

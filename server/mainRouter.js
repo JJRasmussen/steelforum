@@ -1,15 +1,9 @@
 import { Router } from 'express';
-import userRouter from './features/user/user.routes.js'
+import authRouter from './features/auth/auth.routes.js'
 
 const mainRouter = Router();
 
 //Public Routes
-mainRouter.get('/', async(req, res) => {
-    return res.json({
-        name: 'frodo',
-    });
-});
-
 mainRouter.get('/api/home', async(req, res) => {
     return res.json({
         loggedIn: false,
@@ -18,7 +12,7 @@ mainRouter.get('/api/home', async(req, res) => {
     });
 });
 
-mainRouter.use('/user', userRouter);
+mainRouter.use('/api/auth', authRouter);
 
 export default mainRouter;
 

@@ -1,11 +1,11 @@
-import prisma from '../../db/prisma.js';
+import prisma from '../../utils/prisma.js';
 import { ConflictError, BadRequestError } from '../../errors/CustomErrors.js';
 
-export async function addNewUserToDatabase(password, email, username) {
+export async function addNewUserToDatabase(hashedPassword, email, username) {
     try {
         const user = await prisma.user.create({
             data: {
-                hashedPassword: password,
+                hashedPassword: hashedPassword,
                 email: email,
                 Profile: {
                     create: {
@@ -29,13 +29,14 @@ export async function addNewUserToDatabase(password, email, username) {
 }
 
 //get profile
-export async function getProfileFromUsernameLowerCase(usernameLowerCase){
-    const profile = await prisma.profile.findUnique({
+export async function getProfileAndUserFromUsername(username){
+    const profileWithUser = await prisma.profile.findUnique({
         where: {
-            usernameLowerCase: usernameLowerCase
+            usernameLowerCase: username.toLowerCase()
         },
+        include: { user: true },
     });
-    return profile;
+    return profileWithUser;
 };
 //get user
 export async function getUserFromUserId(userId){
@@ -71,7 +72,7 @@ export async function getUserAndProfileFromId(id){
 
 export default {
     addNewUserToDatabase,
-    getProfileFromUsernameLowerCase,
+    getProfileAndUserFromUsername,
     getUserFromUserId,
     getUserFromEmail,
     getUserAndProfileFromId

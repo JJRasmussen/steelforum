@@ -1,5 +1,5 @@
 import { body } from 'express-validator';
-import userDb from './user.queries.js';
+import userDb from './auth.queries.js';
 
 const newUserSchema = [
     body('username')
@@ -14,12 +14,12 @@ const newUserSchema = [
         .withMessage('Username must only contain letters and numbers')
         .bail()
         .custom(async (value) => {
-            const usernameLowerCase = value.toLowerCase();
-            const profile = await userDb.getProfileFromUsernameLowerCase(usernameLowerCase);
+            const profile = await userDb.getProfileAndUserFromUsername(value);
             if (profile) {
                 return Promise.reject('Username already in use')
+            } else {
+                return true;
             };
-            return true;
         }),
     body('email')
         .trim()
@@ -34,8 +34,9 @@ const newUserSchema = [
             const profile = await userDb.getUserFromEmail(value.toLowerCase());
             if (profile) {
                 return Promise.reject('Email already in use');
+            } else {
+                return true;
             };
-            return true;
         }),
     body('password')
         .notEmpty()
@@ -46,8 +47,9 @@ const newUserSchema = [
         .custom((value, { req }) => {
             if (value !== req.body.password) {
                 return Promise.reject('Passwords did not match'); 
-            }
-            return true;
+            } else {
+                return true;
+            };
         }),
 ];
 

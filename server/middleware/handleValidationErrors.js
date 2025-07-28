@@ -5,6 +5,7 @@ export default function handleValidationErrors(req, res, next) {
     const errors = validationResult(req);
     if (errors.isEmpty()){
         return next();
+
     }
     const formattedErrors = errors.array().map(err => (
         {
