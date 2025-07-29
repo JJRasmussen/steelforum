@@ -4,6 +4,7 @@ import userDb from './auth.queries.js';
 const newUserSchema = [
     body('username')
         .trim()
+        .escape()
         .notEmpty()
         .withMessage('Username can not be empty')
         .bail()
@@ -23,6 +24,7 @@ const newUserSchema = [
         }),
     body('email')
         .trim()
+        .escape()
         .toLowerCase()
         .notEmpty()
         .withMessage('Email can not be empty')
@@ -39,17 +41,26 @@ const newUserSchema = [
             }
         }),
     body('password')
+        .trim()
+        .escape()
         .notEmpty()
         .withMessage('Password can not be empty')
-        .isLength({ min: 6 })
+        .bail.isLength({ min: 6 })
         .withMessage('Password length must be at least six characters'),
-    body('passwordConfirmation').custom((value, { req }) => {
-        if (value !== req.body.password) {
-            return Promise.reject('Passwords did not match');
-        } else {
-            return true;
-        }
-    }),
+    body('passwordConfirmation')
+        .trim()
+        .custom((value, { req }) => {
+            if (value !== req.body.password) {
+                return Promise.reject('Passwords did not match');
+            } else {
+                return true;
+            }
+        }),
 ];
 
-export default newUserSchema;
+const loginSchema = [
+    body('username').trim().escape().notEmpty(),
+    body('password').trim().escape().notEmpty(),
+];
+
+export default { newUserSchema, loginSchema };
