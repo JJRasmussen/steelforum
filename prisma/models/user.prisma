@@ -13,19 +13,19 @@ model Profile {
     user              User     @relation(fields: [userId], references: [id])
     userId            String   @unique
     // profile information
-    username          String   
+    username          String
     usernameLowerCase String   @unique
     bio               String?
     avatarUrl         String?
     pronouns          String?
     updatedAt         DateTime @updatedAt
 
-    //posts, comments and votes
-    writtenPosts    Post[]    @relation("writtenPosts")
+    //threads, comments and votes
+    writtenThreads  Thread[]  @relation("writtenThreads")
     writtenComments Comment[] @relation("writtenComments")
     Vote            Vote[]    @relation("userVotes")
     //Forum Stats
-    postCount       Int       @default(0)
+    threadCount     Int       @default(0)
     commentCount    Int       @default(0)
     renown          Int       @default(0)
 }

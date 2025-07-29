@@ -1,10 +1,10 @@
-model Post {
+model Thread {
     id            String    @id @default(uuid())
     createdAt     DateTime  @default(now())
     updatedAt     DateTime  @updatedAt
-    author        Profile   @relation("writtenPosts", fields: [authorId], references: [id])
+    author        Profile   @relation("writtenThreads", fields: [authorId], references: [id])
     authorId      String
-    //post content
+    //Thread content
     title         String
     slug          String    @unique
     content       String
@@ -12,8 +12,9 @@ model Post {
     //child comments
     childComments Comment[]
     //for search optimization
-    tags          Tag[]     @relation("postTags")
-    Vote          Vote[]    @relation("postVotes")
+    tags          Tag[]     @relation("threadTags")
+    Vote          Vote[]    @relation("threadVotes")
+    tagId         String?
 }
 
 model Comment {
@@ -24,9 +25,9 @@ model Comment {
     rating    Int       @default(0)
     author    Profile   @relation("writtenComments", fields: [authorId], references: [id])
     authorId  String
-    //parent post
-    post      Post      @relation(fields: [postId], references: [id])
-    postId    String
+    //parent Thread
+    Thread    Thread    @relation(fields: [threadId], references: [id])
+    threadId  String
     //parent comment if any
     parent    Comment?  @relation("commentReplies", fields: [parentId], references: [id])
     parentId  String?
@@ -45,13 +46,13 @@ model Vote {
     profile   Profile  @relation("userVotes", fields: [profileId], references: [id])
     profileId String
 
-    post   Post?   @relation("postVotes", fields: [postId], references: [id])
-    postId String?
+    thread   Thread? @relation("threadVotes", fields: [threadId], references: [id])
+    threadId String?
 
     comment   Comment? @relation("commentVotes", fields: [commentId], references: [id])
     commentId String?
 
-    @@unique([profileId, postId])
+    @@unique([profileId, threadId])
     @@unique([profileId, commentId])
 }
 
@@ -64,6 +65,7 @@ model Tag {
     ability Ability? @relation("abilityTag")
     keyword Keyword? @relation("keywordTag")
 
-    posts    Post[]    @relation("postTags")
+    threads  Thread[]  @relation("threadTags")
     comments Comment[] @relation("commentTags")
+    threadId String?
 }

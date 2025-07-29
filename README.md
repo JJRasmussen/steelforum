@@ -55,7 +55,7 @@ For the database I have chosen to use PostgreSQL. I used the Prisma ORM to build
 ### forum.prisma
     Has a model for posts, comments, votes and tags.
 
-#### Posts and Comments
+#### Threads and Comments
     Each post will have a unique slug associated with it created from the title.
 
     Comments can have both a post and a comment parent, to keep track of branching discussions. 
