@@ -16,10 +16,10 @@ const newUserSchema = [
         .custom(async (value) => {
             const profile = await userDb.getProfileAndUserFromUsername(value);
             if (profile) {
-                return Promise.reject('Username already in use')
+                return Promise.reject('Username already in use');
             } else {
                 return true;
-            };
+            }
         }),
     body('email')
         .trim()
@@ -36,21 +36,20 @@ const newUserSchema = [
                 return Promise.reject('Email already in use');
             } else {
                 return true;
-            };
+            }
         }),
     body('password')
         .notEmpty()
         .withMessage('Password can not be empty')
         .isLength({ min: 6 })
         .withMessage('Password length must be at least six characters'),
-    body('passwordConfirmation')
-        .custom((value, { req }) => {
-            if (value !== req.body.password) {
-                return Promise.reject('Passwords did not match'); 
-            } else {
-                return true;
-            };
-        }),
+    body('passwordConfirmation').custom((value, { req }) => {
+        if (value !== req.body.password) {
+            return Promise.reject('Passwords did not match');
+        } else {
+            return true;
+        }
+    }),
 ];
 
 export default newUserSchema;

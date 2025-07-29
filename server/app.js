@@ -4,11 +4,11 @@ import mainRouter from './mainRouter.js';
 import dotenv from 'dotenv';
 import errorHandler from './middleware/errorHandler.js';
 
-if (process.env.NODE_ENV === 'test'){
+if (process.env.NODE_ENV === 'test') {
     dotenv.config({ path: '.env.test' });
 } else {
     dotenv.config();
-};
+}
 
 console.log('ENV Loaded: ', process.env.NODE_ENV);
 
@@ -25,9 +25,9 @@ app.use(errorHandler);
 
 export default app;
 
-if (import.meta.main){
+if (import.meta.main) {
     const PORT = 3000;
     app.listen(PORT, () => console.log(`app listening on port ${PORT}!`));
 } else {
-    console.log('App was initiated as module')
+    console.log('App was initiated as module');
 }

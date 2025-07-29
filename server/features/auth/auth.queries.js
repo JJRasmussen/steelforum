@@ -10,7 +10,7 @@ export async function addNewUserToDatabase(hashedPassword, email, username) {
                 Profile: {
                     create: {
                         username: username,
-                        usernameLowerCase: username.toLowerCase()
+                        usernameLowerCase: username.toLowerCase(),
                     },
                 },
             },
@@ -18,62 +18,62 @@ export async function addNewUserToDatabase(hashedPassword, email, username) {
         return user;
     } catch (err) {
         console.error('Error creating user w. Prisma:', err);
-        if(err instanceof prisma.PrismaClientKnownRequestError){
-            if (err.code === 'P2002'){
-                throw new ConflictError('Email or username already in use.')
+        if (err instanceof prisma.PrismaClientKnownRequestError) {
+            if (err.code === 'P2002') {
+                throw new ConflictError('Email or username already in use.');
             }
-            throw new BadRequestError('Invalid data format when creating user')
+            throw new BadRequestError('Invalid data format when creating user');
         }
         throw err;
     }
 }
 
 //get profile
-export async function getProfileAndUserFromUsername(username){
+export async function getProfileAndUserFromUsername(username) {
     const profileWithUser = await prisma.profile.findUnique({
         where: {
-            usernameLowerCase: username.toLowerCase()
+            usernameLowerCase: username.toLowerCase(),
         },
         include: { user: true },
     });
     return profileWithUser;
-};
+}
 //get user
-export async function getUserFromUserId(userId){
+export async function getUserFromUserId(userId) {
     const user = await prisma.user.findUnique({
         where: {
-            id: userId
+            id: userId,
         },
     });
     return user;
-};
+}
 
-export async function getUserFromEmail(email){
+export async function getUserFromEmail(email) {
     const user = await prisma.user.findUnique({
         where: {
-            email: email
+            email: email,
         },
     });
     return user;
-};
+}
 
 //get user and profile for passport
-export async function getUserAndProfileFromId(id){
+export async function getUserAndProfileFromId(id) {
     const user = await prisma.user.findUnique({
         where: {
-            id: id
+            id: id,
         },
         include: {
-            Profile: true
+            Profile: true,
         },
     });
     return user;
-};
+}
 
 export default {
     addNewUserToDatabase,
     getProfileAndUserFromUsername,
     getUserFromUserId,
     getUserFromEmail,
-    getUserAndProfileFromId
-}
+    getUserAndProfileFromId,
+};
