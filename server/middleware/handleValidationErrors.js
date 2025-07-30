@@ -7,7 +7,7 @@ export default function handleValidationErrors(req, res, next) {
         return next();
     }
     const formattedErrors = errors.array().map((err) => ({
-        message: err.msg,
+        description: err.msg,
         param: err.path,
         type: err.msg.includes('already in use') ? 'conflict' : 'badRequest',
     }));

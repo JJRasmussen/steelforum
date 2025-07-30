@@ -42,7 +42,7 @@ describe('/auth/register - username validation', () => {
         expect(res.body.details).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({
-                    message: 'Username can not be empty',
+                    description: 'Username can not be empty',
                 }),
             ])
         );
@@ -57,7 +57,7 @@ describe('/auth/register - username validation', () => {
         expect(res.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(res.body.details).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ message: 'Username is too long' }),
+                expect.objectContaining({ description: 'Username is too long' }),
             ])
         );
     });
@@ -72,7 +72,7 @@ describe('/auth/register - username validation', () => {
         expect(res.body.details).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({
-                    message: 'Username must only contain letters and numbers',
+                    description: 'Username must only contain letters and numbers',
                 }),
             ])
         );
@@ -95,7 +95,7 @@ describe('/auth/register - username validation', () => {
         expect(res.body.details).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({
-                    message: 'Username already in use',
+                    description: 'Username already in use',
                     type: 'conflict',
                 }),
             ])
@@ -108,7 +108,7 @@ describe('/auth/register - email validation', () => {
         expect(res.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(res.body.details).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ message: 'Email can not be empty' }),
+                expect.objectContaining({ description: 'Email can not be empty' }),
             ])
         );
     });
@@ -122,7 +122,7 @@ describe('/auth/register - email validation', () => {
         expect(res.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(res.body.details).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ message: 'Invalid email' }),
+                expect.objectContaining({ description: 'Invalid email' }),
             ])
         );
     });
@@ -143,7 +143,7 @@ describe('/auth/register - email validation', () => {
         expect(res.body.details).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({
-                    message: 'Email already in use',
+                    description: 'Email already in use',
                     type: 'conflict',
                 }),
             ])
@@ -161,7 +161,7 @@ describe('/auth/register - password validation', () => {
         expect(res.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(res.body.details).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ message: 'Passwords did not match' }),
+                expect.objectContaining({ description: 'Passwords did not match' }),
             ])
         );
     });

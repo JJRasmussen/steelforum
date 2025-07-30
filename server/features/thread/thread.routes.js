@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { createNewThread, validateTagIds } from './thread.controller.js';
 import StatusCodes from '../../utils/statusCodes.js';
+import { BadRequestError } from '../../errors/CustomErrors.js';
 import newThreadSchema from './thread.schema.js';
 import handleValidationErrors from '../../middleware/handleValidationErrors.js';
 import passport from '../auth/auth.passport.js';
@@ -15,22 +16,17 @@ threadRouter.post(
     passport.authenticate('jwt', { session: false }),
     async (req, res, next) => {
         try {
-            const validTags = await validateTagIds(req.body.tags);
-            if (!validTags) {
-                return res
-                    .status(StatusCodes.BAD_REQUEST)
-                    .json({ message: 'Invalid tags' });
-            } else {
-                const newThread = await createNewThread(
-                    req.body.title,
-                    req.body.content,
-                    req.body.tags,
-                    req.user
-                );
-                return res
-                    .status(StatusCodes.OK)
-                    .json({ message: 'Thread created', thread: newThread });
-            }
+            await validateTagIds(req.body.tags);
+
+            const newThread = await createNewThread(
+                req.body.title,
+                req.body.content,
+                req.body.tags,
+                req.user
+            );
+            return res
+                .status(StatusCodes.OK)
+                .json({ message: 'Thread created', thread: newThread });
         } catch (err) {
             return next(err);
         }

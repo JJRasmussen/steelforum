@@ -7,9 +7,12 @@ export default (err, req, res, _next) => {
     const message = err.message || 'Something went wrong';
 
     const errorResponse = { error: message };
-    if (err.details) {
-        errorResponse.details = err.details;
+    if (Array.isArray(err.details)) {
+        errorResponse.details = err.details.map((detail) => ({
+            description: detail.description || 'An error occured',
+            param: detail.param || null,
+            type: detail.type || err.type || 'internal',
+        }));
     }
-
     res.status(statusCode).json(errorResponse);
 };
