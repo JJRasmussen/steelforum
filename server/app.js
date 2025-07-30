@@ -17,6 +17,7 @@ const app = express();
 // initialize the passport object on every request
 app.use(passport.initialize());
 
+app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/', mainRouter);
 

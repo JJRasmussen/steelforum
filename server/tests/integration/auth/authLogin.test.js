@@ -1,9 +1,11 @@
 import { jest } from '@jest/globals';
 import StatusCodes from '../../../utils/statusCodes.js';
+import prisma from '../../../utils/prisma.js'
 import {
     authenticateUser,
     issueJWT,
 } from '../../../features/auth/auth.controller.js';
+import { resetDatabase } from '../../testUtils.js';
 import { registerUser, login, protectedRoute } from './authUtils.js';
 
 beforeEach(async () => {
@@ -11,26 +13,32 @@ beforeEach(async () => {
 });
 
 beforeAll(async () => {
-    await registerUser('Test', 'a@a.com', 'password', 'password');
+    await resetDatabase();
+    await registerUser('loginTester', 'login@a.com', 'password', 'password');
+})
+
+afterAll(async () => {
+    await resetDatabase();
+    await prisma.$disconnect();
 })
 
 // eslint-disable-next-line max-lines-per-function
 describe('/auth/login', () => {
     test('happy path - /auth/login', async () => {
-        const res = await login('Test', 'password');
+        const res = await login('loginTester', 'password');
         expect(res.statusCode).toBe(StatusCodes.OK);
         expect(res.body.message).toBe('Successful login');
     });
     test('case insensitive - /auth/login', async () => {
-        const res = await login('tEsT', 'password');
+        const res = await login('loginTeStEr', 'password');
         expect(res.statusCode).toBe(StatusCodes.OK);
         expect(res.body.message).toBe('Successful login');
     });
     test('whitespace trimming - /auth/login', async () => {
-        const res = await login('   Test   ', 'password');
-        expect(res.statusCode).toBe(StatusCodes.UNAUTHORIZED);
+        const res = await login('   loginTester   ', 'password');
+        expect(res.statusCode).toBe(StatusCodes.OK);
         expect(res.body.message).toBe(
-            'Username or password is invalid, please try again'
+            'Successful login'
         );
     });
     test('user not found - login /auth/login', async () => {
@@ -41,14 +49,14 @@ describe('/auth/login', () => {
         );
     });
     test('wrong password - login /auth/login', async () => {
-        const res = await login('Test', 'wrongPassword');
+        const res = await login('loginTester', 'wrongPassword');
         expect(res.statusCode).toBe(StatusCodes.UNAUTHORIZED);
         expect(res.body.message).toBe(
             'Username or password is invalid, please try again'
         );
     });
     test('validate response contains JWT - login /auth/login', async () => {
-        const res = await login('Test', 'password');
+        const res = await login('loginTester', 'password');
         expect(res.statusCode).toBe(StatusCodes.OK);
         expect(res.body.message).toBe('Successful login');
         expect(res.body.token).toBeDefined();

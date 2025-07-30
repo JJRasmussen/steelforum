@@ -1,6 +1,18 @@
 import prisma from '../utils/prisma.js';
+import mainRouter from '../mainRouter.js';
+import express from 'express';
+import errorHandler from '../middleware/errorHandler.js';
+
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+app.use('/', mainRouter);
+app.use(errorHandler);
 
 async function resetDatabase() {
+    await prisma.thread.deleteMany();
     await prisma.profile.deleteMany();
     await prisma.user.deleteMany();
 }
@@ -20,4 +32,4 @@ async function createTestUser() {
     });
 }
 
-export default { resetDatabase, createTestUser };
+export { resetDatabase, createTestUser, app };

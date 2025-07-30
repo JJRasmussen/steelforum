@@ -1,13 +1,19 @@
 import { jest } from '@jest/globals';
+import prisma from '../../../utils/prisma.js';
 import userQueries from '../../../features/auth/auth.queries.js';
-import testUtils from '../../testUtils.js';
+import { resetDatabase } from '../../testUtils.js';
 import StatusCodes from '../../../utils/statusCodes.js';
 import { registerUser } from './authUtils.js';
 
 beforeEach(async () => {
-    await testUtils.resetDatabase();
+    await resetDatabase();
     jest.spyOn(console, 'error').mockImplementation(() => {});
 });
+
+afterAll(async () => {
+    await resetDatabase();
+    prisma.$disconnect;
+})
 
 describe('/register', () => {
     test('happy path /user/signup', async () => {
@@ -28,6 +34,7 @@ describe('/register', () => {
         expect(profile.userId).toBeDefined();
     });
 });
+// eslint-disable-next-line max-lines-per-function
 describe('/auth/register - username validation', () => {
     test('signup fails when username is empty', async () => {
         const res = await registerUser('', 'a@a.com', 'password', 'password');

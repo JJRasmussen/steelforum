@@ -45,7 +45,7 @@ const newUserSchema = [
         .escape()
         .notEmpty()
         .withMessage('Password can not be empty')
-        .bail
+        .bail()
         .isLength({ min: 6 })
         .withMessage('Password length must be at least six characters')
         .isLength({ max: 100 })

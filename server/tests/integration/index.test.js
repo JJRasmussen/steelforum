@@ -1,16 +1,6 @@
 import request from 'supertest';
-import index from '../../mainRouter.js';
-import express from 'express';
-import testUtils from '../testUtils.js';
 import StatusCodes from '../../utils/statusCodes.js';
-
-const app = express();
-app.use(express.urlencoded({ extended: false }));
-app.use('/', index);
-
-beforeAll(async () => {
-    await testUtils.resetDatabase();
-});
+import { app } from '../testUtils.js';
 
 describe('GET /api/home', () => {
     test('anonymous user /api/home', async () => {

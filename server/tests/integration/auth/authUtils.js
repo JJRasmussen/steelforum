@@ -1,14 +1,5 @@
 import request from 'supertest';
-import mainRouter from '../../../mainRouter.js';
-import express from 'express';
-import errorHandler from '../../../middleware/errorHandler.js';
-
-const app = express();
-
-app.use(express.urlencoded({ extended: false }));
-
-app.use('/', mainRouter);
-app.use(errorHandler);
+import { app } from '../../testUtils.js';
 
 export const registerUser = async (
     username,

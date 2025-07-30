@@ -5,7 +5,7 @@ import {
     issueJWT,
 } from './auth.controller.js';
 import StatusCodes from '../../utils/statusCodes.js';
-import { newUserSchema, loginSchema } from './auth.schema.js';
+import authSchemas from './auth.schema.js';
 import handleValidationErrors from '../../middleware/handleValidationErrors.js';
 import passport from './auth.passport.js';
 
@@ -14,25 +14,28 @@ const authRouter = Router();
 
 authRouter.post(
     '/register',
-    newUserSchema,
+    authSchemas.newUserSchema,
     handleValidationErrors,
     async (req, res, next) => {
         try {
-            await createNewUser(
+            const user = await createNewUser(
                 req.body.password,
                 req.body.email,
                 req.body.username
             );
             return res
                 .status(StatusCodes.CREATED)
-                .json({ message: 'User created' });
+                .json({ 
+                    message: 'User created',
+                    user: user
+                 });
         } catch (err) {
             return next(err);
         }
     }
 );
 
-authRouter.post('/login', loginSchema, async (req, res, next) => {
+authRouter.post('/login', authSchemas.loginSchema, async (req, res, next) => {
     try {
         const profile = await authenticateUser(
             req.body.username,

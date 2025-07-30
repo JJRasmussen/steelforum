@@ -1,0 +1,40 @@
+import { Router } from 'express';
+import { createNewThread, validateTagIds } from './thread.controller.js';
+import StatusCodes from '../../utils/statusCodes.js';
+import newThreadSchema from './thread.schema.js';
+import handleValidationErrors from '../../middleware/handleValidationErrors.js';
+import passport from '../auth/auth.passport.js';
+
+// mainrouter adds /api/thread as prefix
+const threadRouter = Router();
+
+threadRouter.post(
+    '/',
+    newThreadSchema,
+    handleValidationErrors,
+    passport.authenticate('jwt', { session: false }),
+    async (req, res, next) => {
+        try {
+            const validTags = await validateTagIds(req.body.tags);
+            if (!validTags) {
+                return res
+                    .status(StatusCodes.BAD_REQUEST)
+                    .json({ message: 'Invalid tags' });
+            } else {
+                const newThread = await createNewThread(
+                    req.body.title,
+                    req.body.content,
+                    req.body.tags,
+                    req.user
+                );
+                return res
+                    .status(StatusCodes.OK)
+                    .json({ message: 'Thread created', thread: newThread });
+            }
+        } catch (err) {
+            return next(err);
+        }
+    }
+);
+
+export default threadRouter;
