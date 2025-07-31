@@ -17,3 +17,8 @@ export const postThread = async (
             tags: tags
         });
 };
+
+export const getThreads = async () => {
+    return await request(app)
+        .get('/api/thread')
+};

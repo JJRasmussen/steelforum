@@ -1,5 +1,9 @@
 import { Router } from 'express';
-import { createNewThread, validateTagIds } from './thread.controller.js';
+import {
+    createNewThread,
+    validateTagIds,
+    getAllThreads,
+} from './thread.controller.js';
 import StatusCodes from '../../utils/statusCodes.js';
 import { BadRequestError } from '../../errors/CustomErrors.js';
 import newThreadSchema from './thread.schema.js';
@@ -32,5 +36,17 @@ threadRouter.post(
         }
     }
 );
+
+threadRouter.get('/', async (req, res, next) => {
+    try {
+        const threads = await getAllThreads();
+        res.status(StatusCodes.OK).json({
+            message: 'Threads sent',
+            threads: threads,
+        });
+    } catch (err) {
+        return next(err);
+    }
+});
 
 export default threadRouter;

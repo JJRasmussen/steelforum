@@ -2,12 +2,11 @@ import slugify from 'slugify';
 import { nanoid } from 'nanoid';
 import threadQueries from './thread.queries.js';
 
-
 const slugifyTitle = (title) => {
     const slug = slugify(title, { lower: true, strict: true, trim: true });
-    const randomIdLength = 8
-    const randomId = nanoid(randomIdLength); 
-    return randomId.concat("/", slug);
+    const randomIdLength = 8;
+    const randomId = nanoid(randomIdLength);
+    return randomId.concat('/', slug);
 };
 export async function validateTagIds(tags) {
     if (tags.length !== 0) {
@@ -30,3 +29,7 @@ export async function createNewThread(title, content, tags, user) {
     return thread;
 }
 
+export async function getAllThreads() {
+    const threads = await threadQueries.queryEveryThread();
+    return threads;
+}

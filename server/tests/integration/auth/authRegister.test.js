@@ -12,7 +12,7 @@ beforeEach(async () => {
 
 afterAll(async () => {
     await resetDatabase();
-    prisma.$disconnect;
+    await prisma.$disconnect();
 })
 
 describe('/register', () => {

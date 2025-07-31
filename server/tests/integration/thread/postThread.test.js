@@ -29,19 +29,19 @@ beforeAll(async () => {
 
 afterAll(async () => {
     await resetDatabase();
-    prisma.$disconnect;
+    await prisma.$disconnect();
 });
 
 describe('post /thread happy path', () => {
-    const happyThread = {
-        title: 'New post Title',
-        content: lorem,
-        //tags to be implemented
-        //when implemented add this:
-        //['Tactician', 'Seize the Initiative']
-        tags: [],
-    };
     test('thread content validation', async () => {
+        const happyThread = {
+            title: 'New post Title',
+            content: lorem,
+            //tags to be implemented
+            //when implemented add this:
+            //['Tactician', 'Seize the Initiative']
+            tags: [],
+        };
         const res = await postThread(
             jwtToken,
             happyThread.title,
@@ -236,7 +236,7 @@ describe('post /thread - invalid input', () => {
             validThread.title,
             validThread.content,
             validThread.tags
-        )
+        );
         expect(res.statusCode).toBe(StatusCodes.UNAUTHORIZED);
-    })
+    });
 });

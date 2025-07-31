@@ -97,7 +97,18 @@ export async function addThreadToDatabase(
                 throw new BadRequestError('Invalid profile or tag reference');
             }
         }
-        throw new BadRequestError('failed to create thread.');
+        throw new BadRequestError('Failed to create thread.');
+    }
+}
+
+export async function queryEveryThread() {
+    try {
+        const threads = await prisma.thread.findMany();
+
+        return threads;
+    } catch (err) {
+        console.error('Error reading every thread', err);
+        throw new InternalError('Failed to get every thread.');
     }
 }
 
@@ -105,4 +116,5 @@ export default {
     getProfileFromUserId,
     queryTagIds,
     addThreadToDatabase,
+    queryEveryThread,
 };
