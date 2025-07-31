@@ -5,7 +5,6 @@ import {
     getAllThreads,
 } from './thread.controller.js';
 import StatusCodes from '../../utils/statusCodes.js';
-import { BadRequestError } from '../../errors/CustomErrors.js';
 import newThreadSchema from './thread.schema.js';
 import handleValidationErrors from '../../middleware/handleValidationErrors.js';
 import passport from '../auth/auth.passport.js';
