@@ -12,10 +12,12 @@ app.use('/', mainRouter);
 app.use(errorHandler);
 
 async function resetDatabase() {
-    await prisma.thread.deleteMany();
-    await prisma.profile.deleteMany();
-    await prisma.user.deleteMany();
-}
+        await prisma.vote.deleteMany();    
+        await prisma.comment.deleteMany();
+        await prisma.thread.deleteMany();
+        await prisma.profile.deleteMany();
+        await prisma.user.deleteMany();
+};
 
 async function createTestUser() {
     return await prisma.user.create({

@@ -1,6 +1,10 @@
 import request from 'supertest';
 import StatusCodes from '../../utils/statusCodes.js';
-import { app } from '../testUtils.js';
+import { app, resetDatabase } from '../testUtils.js';
+
+beforeAll(async () => {
+    await resetDatabase();
+});
 
 describe('GET /api/home', () => {
     test('anonymous user /api/home', async () => {

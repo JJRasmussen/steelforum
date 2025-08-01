@@ -4,9 +4,9 @@ import threadQueries from './thread.queries.js';
 
 const slugifyTitle = (title) => {
     const slug = slugify(title, { lower: true, strict: true, trim: true });
-    const randomIdLength = 8;
-    const randomId = nanoid(randomIdLength);
-    return randomId.concat('/', slug);
+    const randomIDLength = 8;
+    const randomID = nanoid(randomIDLength);
+    return randomID.concat('/', slug);
 };
 export async function validateTagIds(tags) {
     if (tags.length !== 0) {
@@ -16,13 +16,13 @@ export async function validateTagIds(tags) {
     }
 }
 
-export async function createNewThread(title, content, tags, user) {
+export async function createNewThread(title, content, tagIDs, user) {
     const profile = await threadQueries.getProfileFromUserId(user);
     const slug = slugifyTitle(title);
     const thread = await threadQueries.addThreadToDatabase(
         title,
         content,
-        tags,
+        tagIDs,
         profile,
         slug
     );

@@ -21,10 +21,10 @@ const newThreadSchema = [
         .isLength({ min: 25 })
         .withMessage('Content must exceed 25 characters')
         .bail(),
-    body('tags')
+    body('tagIDs')
         .isArray()
         .withMessage('Tags must be an array'),
-    body('tags.*')
+    body('tagIDs.*')
         .trim()
         .escape()
         .isLength({ max: 50 })

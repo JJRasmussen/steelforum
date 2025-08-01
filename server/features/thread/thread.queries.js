@@ -10,7 +10,7 @@ export async function getProfileFromUserId(user) {
     try {
         const profile = await prisma.profile.findUnique({
             where: {
-                userId: user.id,
+                userID: user.id,
             },
         });
         if (!profile) {
@@ -61,7 +61,7 @@ export async function queryTagIds(tags) {
 export async function addThreadToDatabase(
     title,
     content,
-    tagIds,
+    tagIDs,
     profile,
     slug
 ) {
@@ -74,8 +74,8 @@ export async function addThreadToDatabase(
                 author: {
                     connect: { id: profile.id },
                 },
-                tagIds: tagIds?.length
-                    ? { connect: tagIds.map((tagId) => ({ id: tagId })) }
+                tags: tagIDs?.length
+                    ? { connect: tagIDs.map((tagId) => ({ id: tagId })) }
                     : undefined,
             },
             include: {

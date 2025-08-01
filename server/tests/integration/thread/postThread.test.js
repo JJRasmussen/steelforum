@@ -16,6 +16,7 @@ beforeEach(async () => {
 });
 
 beforeAll(async () => {
+    await resetDatabase();
     const registerRes = await registerUser(
         'threadUser',
         'thread@a.com',
@@ -28,7 +29,6 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-    await resetDatabase();
     await prisma.$disconnect();
 });
 
@@ -40,20 +40,20 @@ describe('post /thread happy path', () => {
             //tags to be implemented
             //when implemented add this:
             //['Tactician', 'Seize the Initiative']
-            tags: [],
+            tagIDs: [],
         };
         const res = await postThread(
             jwtToken,
             happyThread.title,
             happyThread.content,
-            happyThread.tags
+            happyThread.tagIDs
         );
         expect(res.statusCode).toBe(StatusCodes.OK);
         expect(res.body.message).toBe('Thread created');
         expect(res.body.thread.title).toBe(happyThread.title);
         expect(res.body.thread.content).toBe(happyThread.content);
         expect(res.body.thread.tags.map((tag) => tag.name)).toEqual(
-            expect.arrayContaining(happyThread.tags)
+            expect.arrayContaining(happyThread.tagIDs)
         );
         expect(res.body.thread.author.id).toBe(profile.id);
         expect(res.body.thread).toHaveProperty('slug');
@@ -88,13 +88,13 @@ describe('post /thread - invalid input', () => {
         const invalidThread = {
             title: 'Hi',
             content: lorem,
-            tags: [],
+            tagIDs: [],
         };
         const res = await postThread(
             jwtToken,
             invalidThread.title,
             invalidThread.content,
-            invalidThread.tags
+            invalidThread.tagIDs
         );
         expect(res.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(res.body.details).toEqual(
@@ -112,13 +112,13 @@ describe('post /thread - invalid input', () => {
         const invalidThread = {
             title: lorem,
             content: longTitle,
-            tags: [],
+            tagIDs: [],
         };
         const res = await postThread(
             jwtToken,
             invalidThread.title,
             invalidThread.content,
-            invalidThread.tags
+            invalidThread.tagIDs
         );
         expect(res.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(res.body.details).toEqual(
@@ -135,13 +135,13 @@ describe('post /thread - invalid input', () => {
         const invalidThread = {
             title: 'New Thread Title',
             content: noContent,
-            tags: [],
+            tagIDs: [],
         };
         const res = await postThread(
             jwtToken,
             invalidThread.title,
             invalidThread.content,
-            invalidThread.tags
+            invalidThread.tagIDs
         );
         expect(res.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(res.body.details).toEqual(
@@ -158,13 +158,13 @@ describe('post /thread - invalid input', () => {
         const invalidThread = {
             title: 'New Thread Title',
             content: shortContent,
-            tags: [],
+            tagIDs: [],
         };
         const res = await postThread(
             jwtToken,
             invalidThread.title,
             invalidThread.content,
-            invalidThread.tags
+            invalidThread.tagIDs
         );
         expect(res.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(res.body.details).toEqual(
@@ -181,13 +181,13 @@ describe('post /thread - invalid input', () => {
         const invalidThread = {
             title: 'New Thread Title',
             content: longContent,
-            tags: [],
+            tagIDs: [],
         };
         const res = await postThread(
             jwtToken,
             invalidThread.title,
             invalidThread.content,
-            invalidThread.tags
+            invalidThread.tagIDs
         );
         expect(res.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(res.body.details).toEqual(
@@ -204,13 +204,13 @@ describe('post /thread - invalid input', () => {
         const invalidThread = {
             title: 'New Thread Title',
             content: lorem,
-            tags: [invalidtag],
+            tagIDs: [invalidtag],
         };
         const res = await postThread(
             jwtToken,
             invalidThread.title,
             invalidThread.content,
-            invalidThread.tags
+            invalidThread.tagIDs
         );
         expect(res.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(res.body.details).toEqual(
@@ -229,13 +229,13 @@ describe('post /thread - invalid input', () => {
             //tags to be implemented
             //when implemented add this:
             //['Tactician', 'Seize the Initiative']
-            tags: [],
+            tagIDs: [],
         };
         const res = await postThread(
             null,
             validThread.title,
             validThread.content,
-            validThread.tags
+            validThread.tagIDs
         );
         expect(res.statusCode).toBe(StatusCodes.UNAUTHORIZED);
     });

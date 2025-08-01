@@ -39,10 +39,10 @@ export async function getProfileAndUserFromUsername(username) {
     return profileWithUser;
 }
 //get user
-export async function getUserFromUserId(userId) {
+export async function getUserFromUserId(userID) {
     const user = await prisma.user.findUnique({
         where: {
-            id: userId,
+            id: userID,
         },
     });
     return user;

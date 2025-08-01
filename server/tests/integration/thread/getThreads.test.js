@@ -13,18 +13,12 @@ beforeEach(async () => {
 
 beforeAll(async () => {
     await resetDatabase();
-    await registerUser(
-        'threadUser',
-        'thread@a.com',
-        'password',
-        'password'
-    );
+    await registerUser('threadUser', 'thread@a.com', 'password', 'password');
     const loginRes = await login('threadUser', 'password');
     jwtToken = loginRes.body.token;
 });
 
 afterAll(async () => {
-    await resetDatabase();
     await prisma.$disconnect();
 });
 

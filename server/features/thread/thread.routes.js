@@ -19,12 +19,12 @@ threadRouter.post(
     passport.authenticate('jwt', { session: false }),
     async (req, res, next) => {
         try {
-            await validateTagIds(req.body.tags);
+            await validateTagIds(req.body.tagIDs);
 
             const newThread = await createNewThread(
                 req.body.title,
                 req.body.content,
-                req.body.tags,
+                req.body.tagIDs,
                 req.user
             );
             return res

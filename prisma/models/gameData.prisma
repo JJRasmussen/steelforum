@@ -4,13 +4,13 @@ model Ability {
     slug        String   @unique
     updatedAt   DateTime @updatedAt
     description String
-    class       Class?   @relation("classAbilities", fields: [classId], references: [id])
-    classId     String?
+    class       Class?   @relation("classAbilities", fields: [classID], references: [id])
+    classID     String?
     levelReq    Int?
-    keywords    Keyword  @relation("abilityKeywords", fields: [keywordId], references: [id])
-    keywordId   String
-    tag         Tag      @relation("abilityTag", fields: [tagId], references: [id])
-    tagId       String   @unique
+    keywords    Keyword  @relation("abilityKeywords", fields: [keywordID], references: [id])
+    keywordID   String
+    tag         Tag      @relation("abilityTag", fields: [tagID], references: [id])
+    tagID       String   @unique
 }
 
 model Keyword {
@@ -18,8 +18,8 @@ model Keyword {
     name      String    @unique
     updatedAt DateTime  @updatedAt
     ability   Ability[] @relation("abilityKeywords")
-    tag       Tag       @relation("keywordTag", fields: [tagId], references: [id])
-    tagId     String    @unique
+    tag       Tag       @relation("keywordTag", fields: [tagID], references: [id])
+    tagID     String    @unique
 }
 
 model Class {
@@ -28,8 +28,8 @@ model Class {
     updatedAt   DateTime  @updatedAt
     description String
     abilities   Ability[] @relation("classAbilities")
-    tag         Tag       @relation("classTag", fields: [tagId], references: [id])
-    tagId       String    @unique
+    tag         Tag       @relation("classTag", fields: [tagID], references: [id])
+    tagID       String    @unique
 }
 
 /**

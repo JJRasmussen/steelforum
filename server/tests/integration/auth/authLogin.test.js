@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import StatusCodes from '../../../utils/statusCodes.js';
-import prisma from '../../../utils/prisma.js'
+import prisma from '../../../utils/prisma.js';
 import {
     authenticateUser,
     issueJWT,
@@ -15,12 +15,11 @@ beforeEach(async () => {
 beforeAll(async () => {
     await resetDatabase();
     await registerUser('loginTester', 'login@a.com', 'password', 'password');
-})
+});
 
 afterAll(async () => {
-    await resetDatabase();
     await prisma.$disconnect();
-})
+});
 
 // eslint-disable-next-line max-lines-per-function
 describe('/auth/login', () => {
@@ -37,9 +36,7 @@ describe('/auth/login', () => {
     test('whitespace trimming - /auth/login', async () => {
         const res = await login('   loginTester   ', 'password');
         expect(res.statusCode).toBe(StatusCodes.OK);
-        expect(res.body.message).toBe(
-            'Successful login'
-        );
+        expect(res.body.message).toBe('Successful login');
     });
     test('user not found - login /auth/login', async () => {
         const res = await login('notTest', 'password');

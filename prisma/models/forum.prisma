@@ -2,8 +2,8 @@ model Thread {
     id            String    @id @default(uuid())
     createdAt     DateTime  @default(now())
     updatedAt     DateTime  @updatedAt
-    author        Profile   @relation("writtenThreads", fields: [authorId], references: [id])
-    authorId      String
+    author        Profile   @relation("writtenThreads", fields: [authorID], references: [id])
+    authorID      String
     //Thread content
     title         String
     slug          String    @unique
@@ -14,28 +14,27 @@ model Thread {
     //for search optimization
     tags          Tag[]     @relation("threadTags")
     Vote          Vote[]    @relation("threadVotes")
-    tagId         String?
 }
 
 model Comment {
-    id        String    @id @default(uuid())
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    content   String
-    rating    Int       @default(0)
-    author    Profile   @relation("writtenComments", fields: [authorId], references: [id])
-    authorId  String
+    id              String    @id @default(uuid())
+    createdAt       DateTime  @default(now())
+    updatedAt       DateTime  @updatedAt
+    content         String
+    rating          Int       @default(0)
+    author          Profile   @relation("writtenComments", fields: [authorID], references: [id])
+    authorID        String
     //parent Thread
-    Thread    Thread    @relation(fields: [threadId], references: [id])
-    threadId  String
+    thread          Thread    @relation(fields: [threadID], references: [id])
+    threadID        String
     //parent comment if any
-    parent    Comment?  @relation("commentReplies", fields: [parentId], references: [id])
-    parentId  String?
+    parentComment   Comment?  @relation("commentReplies", fields: [parentCommentID], references: [id])
+    parentCommentID String?
     //child comments
-    replies   Comment[] @relation("commentReplies")
+    replies         Comment[] @relation("commentReplies")
     //search optimization
-    tags      Tag[]     @relation("commentTags")
-    Vote      Vote[]    @relation("commentVotes")
+    tags            Tag[]     @relation("commentTags")
+    Vote            Vote[]    @relation("commentVotes")
 }
 
 model Vote {
@@ -43,17 +42,17 @@ model Vote {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     strength  Int //currently -3 to +3
-    profile   Profile  @relation("userVotes", fields: [profileId], references: [id])
-    profileId String
+    profile   Profile  @relation("userVotes", fields: [profileID], references: [id])
+    profileID String
 
-    thread   Thread? @relation("threadVotes", fields: [threadId], references: [id])
-    threadId String?
+    thread   Thread? @relation("threadVotes", fields: [threadID], references: [id])
+    threadID String?
 
-    comment   Comment? @relation("commentVotes", fields: [commentId], references: [id])
-    commentId String?
+    comment   Comment? @relation("commentVotes", fields: [commentID], references: [id])
+    commentID String?
 
-    @@unique([profileId, threadId])
-    @@unique([profileId, commentId])
+    @@unique([profileID, threadID])
+    @@unique([profileID, commentID])
 }
 
 model Tag {
@@ -67,5 +66,4 @@ model Tag {
 
     threads  Thread[]  @relation("threadTags")
     comments Comment[] @relation("commentTags")
-    threadId String?
 }

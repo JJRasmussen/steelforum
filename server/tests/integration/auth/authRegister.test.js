@@ -11,9 +11,8 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-    await resetDatabase();
     await prisma.$disconnect();
-})
+});
 
 describe('/register', () => {
     test('happy path /user/signup', async () => {
@@ -31,7 +30,7 @@ describe('/register', () => {
         );
         expect(profile).toBeDefined();
         expect(profile.usernameLowerCase).toBe('test');
-        expect(profile.userId).toBeDefined();
+        expect(profile.userID).toBeDefined();
     });
 });
 // eslint-disable-next-line max-lines-per-function
@@ -57,7 +56,9 @@ describe('/auth/register - username validation', () => {
         expect(res.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(res.body.details).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ description: 'Username is too long' }),
+                expect.objectContaining({
+                    description: 'Username is too long',
+                }),
             ])
         );
     });
@@ -72,7 +73,8 @@ describe('/auth/register - username validation', () => {
         expect(res.body.details).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({
-                    description: 'Username must only contain letters and numbers',
+                    description:
+                        'Username must only contain letters and numbers',
                 }),
             ])
         );
@@ -108,7 +110,9 @@ describe('/auth/register - email validation', () => {
         expect(res.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(res.body.details).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ description: 'Email can not be empty' }),
+                expect.objectContaining({
+                    description: 'Email can not be empty',
+                }),
             ])
         );
     });
@@ -161,7 +165,9 @@ describe('/auth/register - password validation', () => {
         expect(res.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(res.body.details).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ description: 'Passwords did not match' }),
+                expect.objectContaining({
+                    description: 'Passwords did not match',
+                }),
             ])
         );
     });
