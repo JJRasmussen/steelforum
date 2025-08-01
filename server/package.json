@@ -4,7 +4,14 @@
   "description": "A fan forum for a great roleplaying game",
   "main": "index.js",
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "dev": "NODE_ENV=development node app.js",
+    "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest",
+    "lint": "eslint",
+    "db:push:test": "env $(grep -vE '^#|^$' .env.test | xargs) npx prisma db push",
+    "studio": "npx prisma studio",
+    "studio:test": "env $(grep -vE '^#|^$' .env.test | xargs) npx prisma studio"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JJRasmussen/steelforum.git"

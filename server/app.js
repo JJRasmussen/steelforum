@@ -7,7 +7,7 @@ import errorHandler from './middleware/errorHandler.js';
 if (process.env.NODE_ENV === 'test') {
     dotenv.config({ path: '.env.test' });
 } else {
-    dotenv.config();
+    dotenv.config({ path: '.env' });
 }
 
 console.log('ENV Loaded: ', process.env.NODE_ENV);

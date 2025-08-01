@@ -3,5 +3,6 @@ export default {
     transform: {
         '^.+\\.js$': 'babel-jest',
     },
-    roots: ['<rootDir>/server/tests'],
+    transformIgnorePatterns: ['/node_modules/(?!\\.prisma/client/)'],
+    roots: ['<rootDir>/tests'],
 };
